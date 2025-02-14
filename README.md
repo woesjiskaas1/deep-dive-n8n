@@ -8,3 +8,15 @@ door de ai chatbot te gebruiken moet je {@space monkey} als eerst neer zetten
 door het weer te gebruiken moet je {@space monkey wat is het weer vandaag?} zeggen
 
 de link van de bot = https://discord.com/oauth2/authorize?client_id=1338795889338093568
+
+
+
+wat kan er beter volgende keer: 
+
+1. teamwork we hebben het wel samen gedaan maar soms hadden we verschillende ideeën
+2. volgende keer van te voren zien of we echt goed zitten dat we alles nodig hebben om te beginnen
+3. wat meer naar elkaar luisteren
+
+
+
+Actie items
