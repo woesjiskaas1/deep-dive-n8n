@@ -1,0 +1,711 @@
+{
+  "name": "bott stuff",
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338449064521371669",
+          "mode": "list",
+          "cachedResultName": "senn server",
+          "cachedResultUrl": "https://discord.com/channels/1338449064521371669"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $('Bit Discord Trigger').item.json.channelId }}",
+          "mode": "id"
+        },
+        "content": "=het weer vandaag in Amsterdam: {{ $json.weather[0].main }},\nde temperatuur is {{ $json.main.temp_min }} tot {{ $json.main.temp_max }},\ntemperatuurgevoel is {{ $json.main.feels_like }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        260,
+        -140
+      ],
+      "id": "d8d7df49-97f6-453f-9ffa-28df7da1e05d",
+      "name": "Discord",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ufDRZT5zQft3QlPH",
+          "name": "Discord Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9ad96a8e-9e8c-4c43-bad4-f6f6149ec209",
+              "leftValue": "={{ $('Bit Discord Trigger').item.json.content }}",
+              "rightValue": "wat is het weer vandaag?",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -120,
+        -120
+      ],
+      "id": "6b14a7a4-3fbc-4439-93e5-40b3bed32c71",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "cityName": "Amsterdam"
+      },
+      "type": "n8n-nodes-base.openWeatherMap",
+      "typeVersion": 1,
+      "position": [
+        80,
+        -140
+      ],
+      "id": "ad1b1215-82b0-4628-99da-dc398b42e8d2",
+      "name": "OpenWeatherMap",
+      "credentials": {
+        "openWeatherMapApi": {
+          "id": "OSkpbWKv3MlkjO1z",
+          "name": "OpenWeatherMap account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Weather\n**Message goes trough if the weather is asked**",
+        "height": 260,
+        "width": 640
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -200,
+        -240
+      ],
+      "id": "938f4d58-fc19-402a-94c7-38294a4aac57",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-bit-discord.bitDiscordTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1220,
+        340
+      ],
+      "id": "15a06e34-e5d1-448e-a6d0-a20d656ad98b",
+      "name": "Bit Discord Trigger",
+      "credentials": {
+        "discordBotTriggerApi": {
+          "id": "nwe8vQ5A4a03hHnt",
+          "name": "Discord Bot Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338449064521371669",
+          "mode": "list",
+          "cachedResultName": "senn server",
+          "cachedResultUrl": "https://discord.com/channels/1338449064521371669"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338449064521371672",
+          "mode": "list",
+          "cachedResultName": "algemeen",
+          "cachedResultUrl": "https://discord.com/channels/1338449064521371669/1338449064521371672"
+        },
+        "content": "={{ $json.output }}",
+        "options": {
+          "tts": true
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        440,
+        160
+      ],
+      "id": "8fe2a0b2-0976-440c-ae2d-b54826931210",
+      "name": "basicmessage",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ufDRZT5zQft3QlPH",
+          "name": "Discord Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a space monkey, you are very smart and you are from the soviet union\n\nThe person is wondering: {{ $('Bit Discord Trigger').item.json.content }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        140,
+        160
+      ],
+      "id": "6175e41e-dd42-430b-bd92-b775a56b102a",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "llama3.2:latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        120,
+        320
+      ],
+      "id": "55a0f7f5-f247-4971-ac43-7e4511103ec4",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "MgXte4YJy0MmmRIs",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## AI respond\n**ai responds**",
+        "height": 340,
+        "width": 780
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        80
+      ],
+      "id": "24300109-2d39-4f82-9bf8-f5b9303bd3f2",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Bit Discord Trigger').item.json.content }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        240,
+        320
+      ],
+      "id": "4f509136-d8d6-457e-b298-99022a68a61d",
+      "name": "Window Buffer Memory"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338449064521371669",
+          "mode": "list",
+          "cachedResultName": "senn server",
+          "cachedResultUrl": "https://discord.com/channels/1338449064521371669"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338449064521371672",
+          "mode": "list",
+          "cachedResultName": "algemeen",
+          "cachedResultUrl": "https://discord.com/channels/1338449064521371669/1338449064521371672"
+        },
+        "content": "=thinking...",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        0,
+        160
+      ],
+      "id": "108b637c-e91f-40b2-8639-22913ef21699",
+      "name": "Discord2",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ufDRZT5zQft3QlPH",
+          "name": "Discord Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "deleteMessage",
+        "guildId": {
+          "__rl": true,
+          "value": "1338449064521371669",
+          "mode": "list",
+          "cachedResultName": "senn server",
+          "cachedResultUrl": "https://discord.com/channels/1338449064521371669"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338449064521371672",
+          "mode": "list",
+          "cachedResultName": "algemeen",
+          "cachedResultUrl": "https://discord.com/channels/1338449064521371669/1338449064521371672"
+        },
+        "messageId": "={{ $('Discord2').item.json.id }}"
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        580,
+        160
+      ],
+      "id": "55df2f23-e14d-46ed-8f1b-43e1782dbe48",
+      "name": "Discord4",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ufDRZT5zQft3QlPH",
+          "name": "Discord Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338449064521371669",
+          "mode": "list",
+          "cachedResultName": "senn server",
+          "cachedResultUrl": "https://discord.com/channels/1338449064521371669"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1339171775392649236",
+          "mode": "list",
+          "cachedResultName": "admin-channel",
+          "cachedResultUrl": "https://discord.com/channels/1338449064521371669/1339171775392649236"
+        },
+        "content": "={{ $json.authorName }} said: {{ $json.content }}\nday: {{ $now.format('yyyy-MM-dd') }}\ntime: {{ $now.hour }}:{{ $now.minute }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        -880,
+        220
+      ],
+      "id": "6b1caa53-743b-4e29-9e4a-bdf38cf7dc02",
+      "name": "Discord6",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ufDRZT5zQft3QlPH",
+          "name": "Discord Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a censor assistent. Your role is to determine if a text contains curse words.\n\nRespond only with \"Yes\" or \"No\". \nFor example, given the following text: (ik zeg fuck en dat mag niet) you would responde Yes\nAnother example, given the following text: (ik zeg hele nette dingen) you would responde No\n\nYour input:\n\n({{ $('Bit Discord Trigger').item.json.content }})",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -1000,
+        360
+      ],
+      "id": "7c00a4be-de5a-4def-b05b-b69db88f1d76",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": "llama3.2:latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        -1020,
+        560
+      ],
+      "id": "0f2bf026-3780-4026-b717-3ad0fb8bc4f3",
+      "name": "Ollama Chat Model1",
+      "credentials": {
+        "ollamaApi": {
+          "id": "MgXte4YJy0MmmRIs",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2aca8c8e-6aa9-4b61-9c11-53c5d186c97d",
+              "leftValue": "={{ $('Bit Discord Trigger').item.json.content }}",
+              "rightValue": "<@1338795889338093568>",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -440,
+        40
+      ],
+      "id": "a09a7946-a6be-434b-8024-f8a931660d27",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d9fff46e-3920-4667-8115-bcde2acb7a17",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "No",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -680,
+        360
+      ],
+      "id": "92f1724c-93c4-45e0-b4d4-64bafe8568e0",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "content": "## AI Checks for a bad word\n**ai responds yes or no if handles it**",
+        "height": 520,
+        "width": 780
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1280,
+        180
+      ],
+      "id": "86a10318-536e-459b-a260-7879235fb65e",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## checks for mention\n\n",
+        "height": 220
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -500,
+        -40
+      ],
+      "id": "16ef8e95-3889-4245-98f0-47f51ef9d7a2",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "3sTk2kRXyCu6fOTQ",
+          "mode": "list",
+          "cachedResultName": "warnings uno"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        20,
+        560
+      ],
+      "id": "c5885a38-b77b-4b0f-aa24-78a81800a39a",
+      "name": "Execute Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2f9e69b9-9a9f-495c-a77d-174b5244bb2d",
+              "name": "id",
+              "value": "={{ $('Bit Discord Trigger').item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "09f59e95-d547-4c82-9b6e-e050f80a3294",
+              "name": "content",
+              "value": "={{ $('Bit Discord Trigger').item.json.content }}",
+              "type": "string"
+            },
+            {
+              "id": "ffedaf5d-092c-47f3-903a-303295b5bfd8",
+              "name": "channelId",
+              "value": "={{ $('Bit Discord Trigger').item.json.channelId }}",
+              "type": "string"
+            },
+            {
+              "id": "cb33a686-e35b-462e-b974-5925f7c89b0d",
+              "name": "authorName",
+              "value": "={{ $('Bit Discord Trigger').item.json.authorName }}",
+              "type": "string"
+            },
+            {
+              "id": "4c64968e-2045-4bf2-ab94-6a251fdab5ca",
+              "name": "timestamp",
+              "value": "={{ $('Bit Discord Trigger').item.json.timestamp }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -220,
+        560
+      ],
+      "id": "33a34324-2dc9-4264-baca-b4085b1cf147",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "If": {
+      "main": [
+        [
+          {
+            "node": "OpenWeatherMap",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Discord2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenWeatherMap": {
+      "main": [
+        [
+          {
+            "node": "Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bit Discord Trigger": {
+      "main": [
+        [
+          {
+            "node": "Discord6",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "basicmessage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Discord2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "basicmessage": {
+      "main": [
+        [
+          {
+            "node": "Discord4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b982daca-2d43-4afb-bdd4-78e7da134f8b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c4248edd06da3702d2ea1aaeb662f2f9b657e7ce717ca7f069bdbd0a0622a7f4"
+  },
+  "id": "UAB2cSSGQLYeneJG",
+  "tags": []
+}

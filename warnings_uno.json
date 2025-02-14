@@ -1,0 +1,601 @@
+{
+  "name": "warnings uno",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1080,
+        400
+      ],
+      "id": "3cc409e6-8e9c-460f-94cc-bcf223ea49c3",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338449064521371669",
+          "mode": "list",
+          "cachedResultName": "senn server",
+          "cachedResultUrl": "https://discord.com/channels/1338449064521371669"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1339171775392649236",
+          "mode": "list",
+          "cachedResultName": "admin-channel",
+          "cachedResultUrl": "https://discord.com/channels/1338449064521371669/1339171775392649236"
+        },
+        "content": "= {{ $json.authorName }} said: {{ $json.content }}\n\nwich is a bad word so he got a warning",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        -700,
+        300
+      ],
+      "id": "96ffd5f7-8a12-4e8d-a547-dcb6262c957c",
+      "name": "Discord1",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ufDRZT5zQft3QlPH",
+          "name": "Discord Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Database\n**Finds row, handles it**",
+        "height": 620,
+        "width": 800
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -740,
+        120
+      ],
+      "id": "499139dd-b606-4337-b2e6-0abd7bb558cc",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "operation": "getAllPeople",
+        "limit": 1
+      },
+      "id": "b41fca07-a628-485f-af99-9e6660a8cd25",
+      "name": "Customer Datastore (n8n training)",
+      "type": "n8n-nodes-base.n8nTrainingCustomerDatastore",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "25030023-10c2-4711-9c19-125bfea71af5",
+      "name": "Split In Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 2,
+      "position": [
+        -500,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "databaseId": 183097,
+        "tableId": 447251,
+        "limit": 1,
+        "additionalOptions": {
+          "filters": {
+            "fields": [
+              {
+                "field": 3473483,
+                "value": "={{ $('When Executed by Another Workflow').item.json.authorName }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "7e6b38bf-3589-4b36-ac70-944c90555e5c",
+      "name": "Search row",
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [
+        -300,
+        500
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "baserowApi": {
+          "id": "bZIHd41Iyo8dYW1A",
+          "name": "Baserow account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $('When Executed by Another Workflow').item.json.authorName }}",
+              "operation": "equal",
+              "value2": "={{ $json.Naam }}"
+            }
+          ]
+        }
+      },
+      "id": "613d4e90-537c-4f77-b05a-8723fc3c478d",
+      "name": "Found row?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -300,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "input_data",
+              "value": "={{ $('When Executed by Another Workflow').item.json.authorName }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fcad9292-f314-46b7-b222-f778304b19f2",
+      "name": "Retrieve input data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "databaseId": 183097,
+        "tableId": 447251,
+        "rowId": "={{ $('Retrieve input data').item.json.id }}",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": 3473487,
+              "fieldValue": "2"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [
+        160,
+        200
+      ],
+      "id": "81b09e8e-21d5-43be-b02d-b83d110c28c7",
+      "name": "Baserow",
+      "credentials": {
+        "baserowApi": {
+          "id": "bZIHd41Iyo8dYW1A",
+          "name": "Baserow account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "databaseId": 183097,
+        "tableId": 447251,
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": 3473483,
+              "fieldValue": "={{ $('When Executed by Another Workflow').item.json.authorName }}"
+            },
+            {
+              "fieldId": 3473487,
+              "fieldValue": "1"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [
+        160,
+        360
+      ],
+      "id": "4439c35a-18df-4129-8b83-64345c90210d",
+      "name": "Baserow1",
+      "credentials": {
+        "baserowApi": {
+          "id": "bZIHd41Iyo8dYW1A",
+          "name": "Baserow account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338449064521371669",
+          "mode": "list",
+          "cachedResultName": "senn server",
+          "cachedResultUrl": "https://discord.com/channels/1338449064521371669"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $('When Executed by Another Workflow').item.json.channelId }}",
+          "mode": "id"
+        },
+        "content": "you got a warning, 2 warnings result a timeout!",
+        "options": {
+          "tts": false
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        320,
+        360
+      ],
+      "id": "46600fb1-94c7-4184-859c-1026159a4b0d",
+      "name": "basicmessage1",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ufDRZT5zQft3QlPH",
+          "name": "Discord Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1338449064521371669",
+          "mode": "list",
+          "cachedResultName": "senn server",
+          "cachedResultUrl": "https://discord.com/channels/1338449064521371669"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1338449064521371672",
+          "mode": "list",
+          "cachedResultName": "algemeen",
+          "cachedResultUrl": "https://discord.com/channels/1338449064521371669/1338449064521371672"
+        },
+        "content": "2 warnings, timeout given! ",
+        "options": {
+          "tts": false
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        320,
+        200
+      ],
+      "id": "2d28f623-b902-42cd-a5ff-2c40ab229c4b",
+      "name": "basicmessage2",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ufDRZT5zQft3QlPH",
+          "name": "Discord Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        480,
+        360
+      ],
+      "id": "a196436a-b0ce-4eea-9783-41c903fa5a0f",
+      "name": "waitbeforezerowarnings",
+      "webhookId": "cce88f64-7488-4177-8efa-d48d5a0c6aed"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "databaseId": 183097,
+        "tableId": 447251,
+        "rowId": "={{ $('Baserow1').item.json.id }}"
+      },
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [
+        680,
+        360
+      ],
+      "id": "f2611120-3cbf-4152-b2cc-3b12f3a03fd9",
+      "name": "Baserow2",
+      "credentials": {
+        "baserowApi": {
+          "id": "bZIHd41Iyo8dYW1A",
+          "name": "Baserow account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 10,
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        480,
+        200
+      ],
+      "id": "311e9df4-50e5-48bd-8aa9-4e194a481b51",
+      "name": "waitbeforezerowarnings1",
+      "webhookId": "cce88f64-7488-4177-8efa-d48d5a0c6aed"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "databaseId": 183097,
+        "tableId": 447251,
+        "rowId": "={{ $('Baserow1').item.json.id }}"
+      },
+      "type": "n8n-nodes-base.baserow",
+      "typeVersion": 1,
+      "position": [
+        680,
+        200
+      ],
+      "id": "993bd775-f452-4849-aec9-f345c18f9d91",
+      "name": "Baserow3",
+      "credentials": {
+        "baserowApi": {
+          "id": "bZIHd41Iyo8dYW1A",
+          "name": "Baserow account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Timeout\n**handles warnings**",
+        "height": 620,
+        "width": 800
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        80,
+        80
+      ],
+      "id": "cdb91cbd-f844-4d17-886b-bb054848e86d",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "deleteMessage",
+        "guildId": {
+          "__rl": true,
+          "value": "1338449064521371669",
+          "mode": "list",
+          "cachedResultName": "senn server",
+          "cachedResultUrl": "https://discord.com/channels/1338449064521371669"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $('When Executed by Another Workflow').item.json.channelId }}",
+          "mode": "id"
+        },
+        "messageId": "={{ $('When Executed by Another Workflow').item.json.id }}"
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        -480,
+        300
+      ],
+      "id": "73f68655-ea59-4a18-840a-678ce72e9025",
+      "name": "Discord3",
+      "credentials": {
+        "discordBotApi": {
+          "id": "ufDRZT5zQft3QlPH",
+          "name": "Discord Bot"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Discord1": {
+      "main": [
+        [
+          {
+            "node": "Discord3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Customer Datastore (n8n training)": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split In Batches": {
+      "main": [
+        [
+          {
+            "node": "Search row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Found row?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search row": {
+      "main": [
+        [
+          {
+            "node": "Retrieve input data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Found row?": {
+      "main": [
+        [
+          {
+            "node": "Baserow",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Baserow1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve input data": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baserow": {
+      "main": [
+        [
+          {
+            "node": "basicmessage2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baserow1": {
+      "main": [
+        [
+          {
+            "node": "basicmessage1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "basicmessage1": {
+      "main": [
+        [
+          {
+            "node": "waitbeforezerowarnings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "basicmessage2": {
+      "main": [
+        [
+          {
+            "node": "waitbeforezerowarnings1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "waitbeforezerowarnings": {
+      "main": [
+        [
+          {
+            "node": "Baserow2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "waitbeforezerowarnings1": {
+      "main": [
+        [
+          {
+            "node": "Baserow3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Customer Datastore (n8n training)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Discord1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3da02356-ea24-429a-8ccf-76bd3a6461fd",
+  "meta": {
+    "instanceId": "c4248edd06da3702d2ea1aaeb662f2f9b657e7ce717ca7f069bdbd0a0622a7f4"
+  },
+  "id": "3sTk2kRXyCu6fOTQ",
+  "tags": []
+}
