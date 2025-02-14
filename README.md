@@ -10,6 +10,17 @@ door het weer te gebruiken moet je {@space monkey wat is het weer vandaag?} zegg
 de link van de bot = https://discord.com/oauth2/authorize?client_id=1338795889338093568
 
 
+Wat ging er goed:
+
+1. het werken aan het project
+2. hoe efficient we waren
+   
+Wat ging niet goed
+1. af en toe het teamworken
+2. in het begin hadden we iets anders gebruikt wat er voor zorgde dat we later pas aan de gang konden
+3. luisteren naar elkaar
+
+
 
 wat kan er beter volgende keer: 
 
@@ -18,5 +29,3 @@ wat kan er beter volgende keer:
 3. wat meer naar elkaar luisteren
 
 
-
-Actie items
